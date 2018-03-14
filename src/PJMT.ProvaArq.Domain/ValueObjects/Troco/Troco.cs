@@ -31,30 +31,30 @@ namespace PJMT.ProvaArq.Domain.ValueObjects.Troco
 
         private TrocoHandler RegistrarTrocoHandlers()
         {
-            var umECincoCentavosTrocoHandler = new TrocoHandler(Moeda.UmCentavo, Moeda.CincoCentavos);
+            var umACincoCentavosTrocoHandler = new TrocoHandler(Moeda.UmCentavo, Moeda.CincoCentavos);
 
-            var cincoEDezCentavosTrocoHandler = new TrocoHandler(Moeda.CincoCentavos, Moeda.DezCentavos)
-                .RegistrarSucessor(umECincoCentavosTrocoHandler);
+            var cincoADezCentavosTrocoHandler = new TrocoHandler(Moeda.CincoCentavos, Moeda.DezCentavos)
+                .RegistrarSucessor(umACincoCentavosTrocoHandler);
 
-            var dezECinquentaCentavosTrocoHandler = new TrocoHandler(Moeda.DezCentavos, Moeda.CinquentaCentavos)
-                .RegistrarSucessor(cincoEDezCentavosTrocoHandler);
+            var dezACinquentaCentavosTrocoHandler = new TrocoHandler(Moeda.DezCentavos, Moeda.CinquentaCentavos)
+                .RegistrarSucessor(cincoADezCentavosTrocoHandler);
 
-            var cinquentaCentavosEUmRealTrocoHandler = new TrocoHandler(Moeda.CinquentaCentavos, Cedula.UmReal)
-                .RegistrarSucessor(dezECinquentaCentavosTrocoHandler);
+            var cinquentaCentavosAUmRealTrocoHandler = new TrocoHandler(Moeda.CinquentaCentavos, Cedula.UmReal)
+                .RegistrarSucessor(dezACinquentaCentavosTrocoHandler);
 
-            var umECincoReaisTrocoHandler = new TrocoHandler(Cedula.UmReal, Cedula.CincoReais)
-                .RegistrarSucessor(cinquentaCentavosEUmRealTrocoHandler);
+            var umACincoReaisTrocoHandler = new TrocoHandler(Cedula.UmReal, Cedula.CincoReais)
+                .RegistrarSucessor(cinquentaCentavosAUmRealTrocoHandler);
 
-            var cincoEDezReaisTrocoHandler = new TrocoHandler(Cedula.CincoReais, Cedula.DezReais)
-                .RegistrarSucessor(umECincoReaisTrocoHandler);
+            var cincoADezReaisTrocoHandler = new TrocoHandler(Cedula.CincoReais, Cedula.DezReais)
+                .RegistrarSucessor(umACincoReaisTrocoHandler);
 
-            var dezECinquentaReaisTrocoHandler = new TrocoHandler(Cedula.DezReais, Cedula.CinquentaReais)
-                .RegistrarSucessor(cincoEDezReaisTrocoHandler);
+            var dezACinquentaReaisTrocoHandler = new TrocoHandler(Cedula.DezReais, Cedula.CinquentaReais)
+                .RegistrarSucessor(cincoADezReaisTrocoHandler);
 
-            var cinquentaECemReaisTrocoHandler = new TrocoHandler(Cedula.CinquentaReais, Cedula.CemReais)
-                .RegistrarSucessor(dezECinquentaReaisTrocoHandler);
+            var cinquentaACemReaisTrocoHandler = new TrocoHandler(Cedula.CinquentaReais, Cedula.CemReais)
+                .RegistrarSucessor(dezACinquentaReaisTrocoHandler);
 
-            return cinquentaECemReaisTrocoHandler;
+            return cinquentaACemReaisTrocoHandler;
         }
     }
 }
