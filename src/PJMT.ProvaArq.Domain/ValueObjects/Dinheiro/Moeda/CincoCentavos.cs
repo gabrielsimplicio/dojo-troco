@@ -3,5 +3,7 @@
     public class CincoCentavos : IMoeda
     {
         public decimal Valor => 0.05M;
+
+        public override string ToString() => "Cinco Centavos";
     }
 }

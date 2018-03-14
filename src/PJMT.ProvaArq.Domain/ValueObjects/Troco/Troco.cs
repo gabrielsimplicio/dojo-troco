@@ -17,7 +17,7 @@ namespace PJMT.ProvaArq.Domain.ValueObjects.Troco
             CalcularTroco();
         }
 
-        public void CalcularTroco()
+        private void CalcularTroco()
         {
             var montanteBuilder = new MontanteBuilder();
 
@@ -29,7 +29,7 @@ namespace PJMT.ProvaArq.Domain.ValueObjects.Troco
             Montante = montanteBuilder.ObterMontante();
         }
 
-        public TrocoHandler RegistrarTrocoHandlers()
+        private TrocoHandler RegistrarTrocoHandlers()
         {
             var umECincoCentavosTrocoHandler = new TrocoHandler(Moeda.UmCentavo, Moeda.CincoCentavos);
 

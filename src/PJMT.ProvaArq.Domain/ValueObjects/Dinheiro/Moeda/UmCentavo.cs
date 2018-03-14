@@ -3,5 +3,7 @@
     public class UmCentavo : IMoeda
     {
         public decimal Valor => 0.01M;
+
+        public override string ToString() => "Um Centavo";
     }
 }

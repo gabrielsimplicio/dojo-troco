@@ -3,5 +3,7 @@
     public class CemReais : ICedula
     {
         public decimal Valor => 100M;
+
+        public override string ToString() => "Cem Reais";
     }
 }
