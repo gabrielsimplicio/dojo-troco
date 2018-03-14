@@ -1,5 +1,4 @@
 ﻿using PJMT.ProvaArq.Domain.Entities.Pagamento;
-using PJMT.ProvaArq.Domain.ValueObjects.Dinheiro;
 using PJMT.ProvaArq.Domain.ValueObjects.Dinheiro.Cedula;
 using PJMT.ProvaArq.Domain.ValueObjects.Dinheiro.Moeda;
 using PJMT.ProvaArq.Domain.ValueObjects.Montante;
@@ -24,29 +23,38 @@ namespace PJMT.ProvaArq.Domain.ValueObjects.Troco
 
             var troco = Pagamento.ValorEfetivamentePago - Pagamento.ValorTotal;
 
-            //TODO: Chain of responsability
-            HandleTroco(troco, Cedula.CinquentaReais, Cedula.CemReais, montanteBuilder);
-            HandleTroco(troco, Cedula.DezReais, Cedula.CinquentaReais, montanteBuilder);
-            HandleTroco(troco, Cedula.CincoReais, Cedula.DezReais, montanteBuilder);
-            HandleTroco(troco, Cedula.UmReal, Cedula.CincoReais, montanteBuilder);
-            HandleTroco(troco, Moeda.CinquentaCentavos, Cedula.UmReal, montanteBuilder);
-            HandleTroco(troco, Moeda.DezCentavos, Moeda.CinquentaCentavos, montanteBuilder);
-            HandleTroco(troco, Moeda.CincoCentavos, Moeda.DezCentavos, montanteBuilder);
-            HandleTroco(troco, Moeda.UmCentavo, Moeda.CincoCentavos, montanteBuilder);
+            var handlers = RegistrarTrocoHandlers();
+            handlers.HandleTroco(troco, montanteBuilder);
 
             Montante = montanteBuilder.ObterMontante();
         }
 
-        private void HandleTroco(decimal troco, IDinheiro faixaInicial, IDinheiro faixaFinal, MontanteBuilder montanteBuilder)
+        public TrocoHandler RegistrarTrocoHandlers()
         {
-            if (troco >= faixaInicial.Valor && troco < faixaFinal.Valor)
-            {
-                while (troco > faixaInicial.Valor - 0.01M)
-                {
-                    montanteBuilder.Adicionar(faixaInicial);
-                    troco -= faixaInicial.Valor;
-                }
-            }
+            var umECincoCentavosTrocoHandler = new TrocoHandler(Moeda.UmCentavo, Moeda.CincoCentavos);
+
+            var cincoEDezCentavosTrocoHandler = new TrocoHandler(Moeda.CincoCentavos, Moeda.DezCentavos)
+                .RegistrarSucessor(umECincoCentavosTrocoHandler);
+
+            var dezECinquentaCentavosTrocoHandler = new TrocoHandler(Moeda.DezCentavos, Moeda.CinquentaCentavos)
+                .RegistrarSucessor(cincoEDezCentavosTrocoHandler);
+
+            var cinquentaCentavosEUmRealTrocoHandler = new TrocoHandler(Moeda.CinquentaCentavos, Cedula.UmReal)
+                .RegistrarSucessor(dezECinquentaCentavosTrocoHandler);
+
+            var umECincoReaisTrocoHandler = new TrocoHandler(Cedula.UmReal, Cedula.CincoReais)
+                .RegistrarSucessor(cinquentaCentavosEUmRealTrocoHandler);
+
+            var cincoEDezReaisTrocoHandler = new TrocoHandler(Cedula.CincoReais, Cedula.DezReais)
+                .RegistrarSucessor(umECincoReaisTrocoHandler);
+
+            var dezECinquentaReaisTrocoHandler = new TrocoHandler(Cedula.DezReais, Cedula.CinquentaReais)
+                .RegistrarSucessor(cincoEDezReaisTrocoHandler);
+
+            var cinquentaECemReaisTrocoHandler = new TrocoHandler(Cedula.CinquentaReais, Cedula.CemReais)
+                .RegistrarSucessor(dezECinquentaReaisTrocoHandler);
+
+            return cinquentaECemReaisTrocoHandler;
         }
     }
 }

@@ -1,12 +1,18 @@
-﻿namespace PJMT.ProvaArq.Domain.Entities.Pagamento
+﻿using System;
+
+namespace PJMT.ProvaArq.Domain.Entities.Pagamento
 {
     public class Pagamento
     {
+        public Guid PagamentoId { get; private set; }
         public decimal ValorTotal { get; private set; }
         public decimal ValorEfetivamentePago { get; private set; }
 
-        public Pagamento(decimal valorTotal, decimal valorEfetivamentePago)
+        public Pagamento(Guid pagamentoId, decimal valorTotal, decimal valorEfetivamentePago)
         {
+            if (pagamentoId == Guid.Empty)
+                throw new ArgumentOutOfRangeException();
+
             if (valorTotal <= 0M)
                 throw new ValorTotalInseridoNoPagamentoOutOfRangeException();
 
@@ -16,6 +22,7 @@
             if (valorEfetivamentePago < valorTotal)
                 throw new ValorEfetivamentePagoMenorQueValorTotalException();
 
+            PagamentoId = pagamentoId;
             ValorTotal = valorTotal;
             ValorEfetivamentePago = valorEfetivamentePago;
         }
